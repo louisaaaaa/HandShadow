@@ -28,7 +28,7 @@ val_loader = DataLoader(val_dataset, batch_size=64, shuffle=False)
 
 # 3. 定义ResNet模型
 #model = models.resnet18(pretrained=True)  # 使用预训练的ResNet18
-model = models.resnet50(pretrained=True)  # 使用预训练的ResNet18
+model = models.resnet50(pretrained=True)  # 使用预训练的ResNet50
 num_ftrs = model.fc.in_features
 model.fc = nn.Linear(num_ftrs, 3)  # 修改最后一层以匹配类别数
 

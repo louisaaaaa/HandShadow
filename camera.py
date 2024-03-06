@@ -5,9 +5,19 @@ from PIL import Image, ImageTk
 from torchvision import transforms
 from torchvision import models
 import torch.nn as nn
+import numpy as np
+
+
+def adjust_gamma(image, gamma=1.0):
+    # Set up Look-up-Table for gamma correction
+    invGamma = 1.0 / gamma
+    table = np.array([((i / 255.0) ** invGamma) * 255
+                      for i in np.arange(0, 256)]).astype("uint8")
+    # Apply Gamma Correction
+    return cv2.LUT(image, table)
 
 # 加载模型
-model = models.resnet18(pretrained=False)
+model = models.resnet50(pretrained=False)
 num_ftrs = model.fc.in_features
 model.fc = nn.Linear(num_ftrs, 6)  # 假设您有3个类别
 model.load_state_dict(torch.load('model_weights.pth'))
@@ -33,8 +43,21 @@ def update_frame():
         print("Failed to grab frame")
         return
     
-    # 将捕获的帧转换为Tkinter格式
+    # Histogram Equalize 
+    img_yuv = cv2.cvtColor(frame, cv2.COLOR_BGR2YUV)
+    img_yuv[:, :, 0] = cv2.equalizeHist(img_yuv[:, :, 0])
+    frame = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
+
+    # Gamma correction, suppose gamma=1.2
+    frame = adjust_gamma(frame, gamma=1.2)
+    
+    # Denoising
+    frame = cv2.fastNlMeansDenoisingColored(frame, None, 10, 10, 7, 21)
+
+    # color space conversion
     cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+
+    # 将捕获的帧转换为Tkinter格式
     img = Image.fromarray(cv2image)
     imgtk = ImageTk.PhotoImage(image=img)
     video_label.imgtk = imgtk
