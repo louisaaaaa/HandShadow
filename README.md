@@ -1,7 +1,7 @@
 # HandShadow
 Interactive hand shadow teaching assistant based on hand pose recognition
 
-Final project for TEHCIN513
+Final project for TECHIN513
 
 Group 1 members: Jiawen Chen, Kaiwen Men, Louisa Shi
 
