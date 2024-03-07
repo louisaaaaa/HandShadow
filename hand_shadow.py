@@ -73,7 +73,7 @@ class HandShadowApp(QMainWindow):
         ])
 
         # Class labels
-        self.classes = ['deer', 'snake', 'bird', 'dog', 'other']
+        self.classes = ['bird', 'deer', 'dog', 'other', 'snake']
 
         # Set up camera
         self.cap = cv2.VideoCapture(0)

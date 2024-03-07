@@ -43,6 +43,7 @@ def update_frame():
         print("Failed to grab frame")
         return
     
+    '''
     # Histogram Equalize 
     img_yuv = cv2.cvtColor(frame, cv2.COLOR_BGR2YUV)
     img_yuv[:, :, 0] = cv2.equalizeHist(img_yuv[:, :, 0])
@@ -53,10 +54,10 @@ def update_frame():
     
     # Denoising
     frame = cv2.fastNlMeansDenoisingColored(frame, None, 10, 10, 7, 21)
-
+'''
     # color space conversion
     cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
-
+    
     # 将捕获的帧转换为Tkinter格式
     img = Image.fromarray(cv2image)
     imgtk = ImageTk.PhotoImage(image=img)
