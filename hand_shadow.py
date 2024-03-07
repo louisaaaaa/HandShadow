@@ -61,7 +61,7 @@ class HandShadowApp(QMainWindow):
         # Load Model
         self.model = models.resnet50(pretrained=False)
         num_ftrs = self.model.fc.in_features
-        self.model.fc = torch.nn.Linear(num_ftrs, 6)  # 假设您有6个类别
+        self.model.fc = torch.nn.Linear(num_ftrs, 6)
         self.model.load_state_dict(torch.load('model_weights.pth'))
         self.model.eval()
 
@@ -133,19 +133,18 @@ class HandShadowApp(QMainWindow):
         # img_yuv[:, :, 0] = cv2.equalizeHist(img_yuv[:, :, 0])
         # frame = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
 
-        # # Gamma correction, suppose gamma=1.2
+        # Gamma correction, suppose gamma=1.2
         # frame = adjust_gamma(frame, gamma=1.2)
 
         # # Denoising
         # frame = cv2.fastNlMeansDenoisingColored(frame, None, 10, 10, 7, 21)
 
-        # # color space conversion
-        # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+  
 
-        ''' DSP processing part END'''
-
-        # Convert the captured frame to PyQt format
+        # color space conversion
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        ''' DSP processing part END'''
+        
         height, width, channel = frame_rgb.shape
         bytes_per_line = 3 * width
         q_img = QImage(frame_rgb.data, width, height, bytes_per_line, QImage.Format_RGB888)
